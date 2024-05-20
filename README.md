@@ -3,6 +3,9 @@
 ## API Description
 This repository is the client that is part of a web application project that provides a basic to-do list for people to organize their daily routine
 
+## Architecture Diagram
+![Architecture Diagram](docs/to-do-client.png)
+
 # API Contract
 
 ## Endpoints:

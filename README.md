@@ -311,3 +311,82 @@ Update task completion status for the given user and task
 	}
 }
 ```
+## DELETE - /users/{userId}/tasks/{taskId}
+Delete task for the given user and task
+
+### Request params
+| Parameter  | Location    | Mandatory | Description                                       |
+| :---:      | :---:       | :---:     | :---:                                             |
+| userId     | path        | yes       | Unique identifier of the user (UUID formatted)    |
+| taskId     | path        | yes       | Unique identifier of the task (UUID formatted)    |
+| requestId  | Header      | no        | Unique identifier of the request (UUID formatted) |
+
+### Response
+#### Success
+- Status Code: 204
+
+#### Authentication Failed
+- Status Code: 401
+- Content:
+```
+{
+	data: {
+		message: "Invalid token"
+	}
+}
+```
+#### Bad request
+- Status Code: 400
+- Content:
+```
+{
+	data: {
+		message: "There are some fields errors"
+		fields: [
+			fieldName: field error message
+		]
+	}
+}
+```
+
+
+## Installation guide
+
+### Install protocol buffer and go plugins for protobuf
+
+First, you need to have golang installed. After that, run the following commands:
+```
+apt install -y protobuf-compiler
+protoc --version
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+```
+
+In order to the following commands work, is also necessary that you include the GOPATH in the PATH env variable:
+```
+export PATH="$PATH:$(go env GOPATH)/bin"
+```
+
+### Generate the .pb.go files
+```
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative ./app/config/grpc/to_do_list.proto
+```
+
+### Install golang and its dependencies
+```
+cd app/
+go mod init
+apt-get -y install make
+make deploy
+```
+
+# References used during the project:
+- https://blog.logrocket.com/jwt-authentication-go/
+- https://dave.cheney.net/practical-go/presentations/qcon-china.html
+- https://grpc.io/docs/languages/go/basics/
+- https://medium.com/@cheickzida/golang-implementing-jwt-token-authentication-bba9bfd84d60
+- https://medium.com/@rnp0728/secure-password-hashing-in-go-a-comprehensive-guide-5500e19e7c1f
+- https://medium.com/@wahyubagus1910/build-scalable-restful-api-with-golang-gin-gonic-framework-43793c730d10
+
+- https://grpc.io/docs/languages/go/basics/#client
+- https://grpc.io/docs/languages/go/quickstart/#get-the-example-code
